@@ -17,9 +17,12 @@ bot.command('help', ctx => {
 
 bot.command('voimailusali', ctx => {
     console.log(ctx.from)
-    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/852/reservations.json?from=2024-03-14&to=2024-03-15`)
+    const today = new Date()
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/852/reservations.json?from=${today.getFullYear()}-${today.getMonth()}-${today.getDay()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()}-${tomorrow.getDay()}`)
     .then(response => {
-        console.log(response.data)
+        //console.log(response.data)
         const calendar = makeCalendar(response.data)
         bot.telegram.sendMessage(ctx.chat.id, calendar, {})
     })
