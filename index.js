@@ -20,7 +20,7 @@ bot.command('voimailusali', ctx => {
     const today = new Date()
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
-    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/852/reservations.json?from=${today.getFullYear()}-${today.getMonth()}-${today.getDay()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()}-${tomorrow.getDay()}`)
+    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/852/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
     .then(response => {
         //console.log(response.data)
         const calendar = makeCalendar(response.data)
