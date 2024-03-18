@@ -46,4 +46,10 @@ function makeCalendar(data){
     return reservationInfo
 }
 
-bot.launch()
+// Start webhook via launch method (preferred)
+bot.launch({
+    webhook: {
+      domain: process.env.URL,
+      port: process.env.PORT
+    }
+})
