@@ -5,16 +5,30 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 
 bot.command('start', ctx => {
     console.log(ctx.from)
-    bot.telegram.sendMessage(ctx.chat.id, 'Tervetuloa valkeakosken tila telegram bottiin.\nLähettämällä /help saat näkyviin käytössä olevat komennot', {})
+    bot.telegram.sendMessage(ctx.chat.id, 'Tervetuloa Valkeakosken liikunta tila telegram bottiin.\nLähettämällä /help saat näkyviin käytössä olevat komennot', {})
 })
 
 bot.command('help', ctx => {
     console.log(ctx.from)
-    bot.telegram.sendMessage(ctx.chat.id, `Käytettävissä olevat komennot.
+    bot.telegram.sendMessage(ctx.chat.id, `Käytettävissä olevat komennot:
     /help
+    /palloiluhalli
     /uimahalli
     /voimailusali
-    /wareena`, {})
+    /wareena
+    Voit selailla päivän varauksia lähetämällä haluamasi tilan nimen`, {})
+})
+
+bot.command('palloiluhalli', ctx => {
+    console.log(ctx.from)
+    const today = new Date()
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/896/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
+    .then(response => {
+        const calendar = makeCalendar(response.data)
+        bot.telegram.sendMessage(ctx.chat.id, calendar, {})
+    })
 })
 
 bot.command('uimahalli', ctx => {
@@ -68,7 +82,7 @@ function makeCalendar(data){
         const endTime = `${endDate.getHours()}:${(endDate.getMinutes()<10?'0':'') + endDate.getMinutes()}`
         // Concatenate the start date, end date, and user group name to the string
         reservationInfo += `\n\n${startTime} - ${endTime}\n${reservation.text}`
-        if(reservation.text.includes("Nyrkkeily")){
+        if(reservation.text.toLowerCase().includes("nyrkkeily")){
             reservationInfo += ' 🥊'
         }
     })
