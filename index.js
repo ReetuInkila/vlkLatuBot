@@ -41,6 +41,9 @@ function makeCalendar(data){
         const endTime = `${endDate.getHours()}:${(endDate.getMinutes()<10?'0':'') + endDate.getMinutes()}`
         // Concatenate the start date, end date, and user group name to the string
         reservationInfo += `\n\n${startTime} - ${endTime}\n${reservation.text}`
+        if(reservation.text.includes("Nyrkkeily")){
+            reservationInfo += '🥊'
+        }
     })
 
     return reservationInfo
