@@ -12,7 +12,8 @@ bot.command('help', ctx => {
     console.log(ctx.from)
     bot.telegram.sendMessage(ctx.chat.id, `Käytettävissä olevat komennot.
     /help
-    /voimailusali`, {})
+    /voimailusali
+    /wareena`, {})
 })
 
 bot.command('voimailusali', ctx => {
@@ -21,6 +22,19 @@ bot.command('voimailusali', ctx => {
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
     axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/852/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
+    .then(response => {
+        //console.log(response.data)
+        const calendar = makeCalendar(response.data)
+        bot.telegram.sendMessage(ctx.chat.id, calendar, {})
+    })
+})
+
+bot.command('wareena', ctx => {
+    console.log(ctx.from)
+    const today = new Date()
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/836/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
     .then(response => {
         //console.log(response.data)
         const calendar = makeCalendar(response.data)
@@ -42,7 +56,7 @@ function makeCalendar(data){
         // Concatenate the start date, end date, and user group name to the string
         reservationInfo += `\n\n${startTime} - ${endTime}\n${reservation.text}`
         if(reservation.text.includes("Nyrkkeily")){
-            reservationInfo += '🥊'
+            reservationInfo += ' 🥊'
         }
     })
 
