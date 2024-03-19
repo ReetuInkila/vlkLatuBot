@@ -68,6 +68,8 @@ function makeCalendar(data){
         reservationInfo += `\n\n${startTime} - ${endTime}\n${reservation.text}`
         if(reservation.text.toLowerCase().includes("nyrkkeily")){
             reservationInfo += ' 🥊'
+        }else if(reservation.text.toLowerCase().includes("kiekko")){
+            reservationInfo += ' 🏒'
         }
     })
     return reservationInfo
