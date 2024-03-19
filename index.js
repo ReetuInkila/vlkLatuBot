@@ -20,11 +20,8 @@ bot.command('help', ctx => {
 })
 
 bot.command('palloiluhalli', ctx => {
-    console.log(ctx.from)
-    const today = new Date()
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/896/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
+    const url = createUrl(896)
+    axios.get(url)
     .then(response => {
         const calendar = makeCalendar(response.data)
         bot.telegram.sendMessage(ctx.chat.id, calendar, {})
@@ -32,11 +29,8 @@ bot.command('palloiluhalli', ctx => {
 })
 
 bot.command('uimahalli', ctx => {
-    console.log(ctx.from)
-    const today = new Date()
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/835/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
+    const url = createUrl(835)
+    axios.get(835)
     .then(response => {
         const calendar = makeCalendar(response.data)
         bot.telegram.sendMessage(ctx.chat.id, calendar, {})
@@ -44,30 +38,27 @@ bot.command('uimahalli', ctx => {
 })
 
 bot.command('voimailusali', ctx => {
-    console.log(ctx.from)
-    const today = new Date()
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/852/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
+    const url = createUrl(852)
+    axios.get(url)
     .then(response => {
         const calendar = makeCalendar(response.data)
         bot.telegram.sendMessage(ctx.chat.id, calendar, {})
     })
 })
 
-bot.command('wareena', ctx => {
-    console.log(ctx.from)
+bot.command('wareena', async ctx => {
+    const url = createUrl(836)
+    let response = await axios.get(url)
+    const calendar = makeCalendar(response.data)
+    bot.telegram.sendMessage(ctx.chat.id, calendar, {})
+})
+
+function createUrl(locationNumber){
     const today = new Date()
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
-    axios.get(`https://valkeakoski.tilamisu.fi/fi/locations/836/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`)
-    .then(response => {
-        const calendar = makeCalendar(response.data)
-        bot.telegram.sendMessage(ctx.chat.id, calendar, {})
-    })
-})
-
-
+    return `https://valkeakoski.tilamisu.fi/fi/locations/${locationNumber}/reservations.json?from=${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}&to=${tomorrow.getFullYear()}-${tomorrow.getMonth()+1}-${tomorrow.getDate()}`
+}
 
 function makeCalendar(data){
     const date = new Date(data[0].start_date).toLocaleDateString()
