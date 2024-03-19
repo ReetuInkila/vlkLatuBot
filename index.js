@@ -28,7 +28,7 @@ bot.command('palloiluhalli', async ctx => {
 
 bot.command('uimahalli', async ctx => {
     const url = createUrl(835)
-    let response = await axios.get(835)
+    let response = await axios.get(url)
     const calendar = makeCalendar(response.data)
     bot.telegram.sendMessage(ctx.chat.id, calendar, {})
 })
