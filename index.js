@@ -19,31 +19,25 @@ bot.command('help', ctx => {
     Voit selailla päivän varauksia lähetämällä haluamasi tilan nimen`, {})
 })
 
-bot.command('palloiluhalli', ctx => {
+bot.command('palloiluhalli', async ctx => {
     const url = createUrl(896)
-    axios.get(url)
-    .then(response => {
-        const calendar = makeCalendar(response.data)
-        bot.telegram.sendMessage(ctx.chat.id, calendar, {})
-    })
+    let response = await axios.get(url)
+    const calendar = makeCalendar(response.data)
+    bot.telegram.sendMessage(ctx.chat.id, calendar, {})
 })
 
-bot.command('uimahalli', ctx => {
+bot.command('uimahalli', async ctx => {
     const url = createUrl(835)
-    axios.get(835)
-    .then(response => {
-        const calendar = makeCalendar(response.data)
-        bot.telegram.sendMessage(ctx.chat.id, calendar, {})
-    })
+    let response = await axios.get(835)
+    const calendar = makeCalendar(response.data)
+    bot.telegram.sendMessage(ctx.chat.id, calendar, {})
 })
 
-bot.command('voimailusali', ctx => {
+bot.command('voimailusali', async ctx => {
     const url = createUrl(852)
-    axios.get(url)
-    .then(response => {
-        const calendar = makeCalendar(response.data)
-        bot.telegram.sendMessage(ctx.chat.id, calendar, {})
-    })
+    let response = await axios.get(url)
+    const calendar = makeCalendar(response.data)
+    bot.telegram.sendMessage(ctx.chat.id, calendar, {})
 })
 
 bot.command('wareena', async ctx => {
@@ -68,7 +62,6 @@ function makeCalendar(data){
     data.forEach(reservation => {
         const startDate = new Date(reservation.start_date)
         const endDate = new Date(reservation.end_date)
-        
         const startTime = `${startDate.getHours()}:${(startDate.getMinutes()<10?'0':'') + startDate.getMinutes()}`
         const endTime = `${endDate.getHours()}:${(endDate.getMinutes()<10?'0':'') + endDate.getMinutes()}`
         // Concatenate the start date, end date, and user group name to the string
@@ -77,7 +70,6 @@ function makeCalendar(data){
             reservationInfo += ' 🥊'
         }
     })
-
     return reservationInfo
 }
 
